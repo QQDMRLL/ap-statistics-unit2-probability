@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AP Statistics Unit 2：概率、随机变量与分布</title>
+<style>
+:root{
+  color-scheme: light;
+  --paper:#F6F8FA; --grid:#E3EAF2; --ink:#1E3A8A; --ink-soft:#DCE4F7;
+  --graphite:#2E3440; --muted:#5B6472; --hl:#FFE36E; --red:#C8283C; --green:#2F7D5B;
+  --serif:"Songti SC","STSong","Noto Serif SC","Source Han Serif SC",Georgia,serif;
+  --sans:"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+body{margin:0;font-family:var(--sans);color:var(--graphite);line-height:1.75;font-size:16px;
+  background-color:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:24px 24px;}
+a{color:var(--ink)}
+:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+.layout{display:grid;grid-template-columns:230px minmax(0,1fr);max-width:1180px;margin:0 auto}
+nav.toc{position:sticky;top:0;height:100vh;overflow:auto;padding:28px 18px 28px 22px;font-size:14px;border-right:1px solid var(--grid);background:rgba(246,248,250,.92)}
+nav.toc .brand{font-family:var(--serif);font-size:19px;font-weight:700;color:var(--ink);line-height:1.3;margin-bottom:18px}
+nav.toc ol{list-style:none;margin:0;padding:0}
+nav.toc li a{display:grid;grid-template-columns:38px 1fr;gap:4px;padding:5px 6px;text-decoration:none;color:var(--graphite);border-radius:4px}
+nav.toc li a:hover{background:var(--ink-soft)}
+nav.toc li a.active{background:var(--hl)}
+nav.toc .n{color:var(--muted);font-variant-numeric:tabular-nums}
+nav.toc .sep{margin:14px 6px 6px;color:var(--muted);font-size:12px}
+main{padding:36px 44px 120px;min-width:0}
+section{max-width:800px;margin:0 0 84px;scroll-margin-top:20px}
+section.wide{max-width:980px}
+h1{font-family:var(--serif);font-size:44px;line-height:1.2;margin:8px 0 10px;color:var(--ink);font-weight:800;letter-spacing:.01em}
+h2{font-family:var(--serif);font-size:30px;line-height:1.3;margin:0 0 6px;color:var(--ink)}
+h2 .num{font-family:Georgia,serif;font-weight:400;color:var(--muted);margin-right:12px;font-size:24px}
+h3{font-size:19px;margin:34px 0 8px}
+.lede{font-size:18px;color:var(--muted);max-width:680px;margin:0 0 22px}
+.src{font-size:13px;color:var(--muted);margin:0 0 22px}
+p{margin:0 0 14px}
+var{font-family:Georgia,"Times New Roman",serif;font-style:italic}
+.en{font-family:Georgia,serif}
+mark{background:linear-gradient(transparent 45%,var(--hl) 45%);color:inherit;padding:0 2px}
+.formula{font-family:Georgia,"Times New Roman",serif;font-size:20px;background:#fff;border:1.5px solid var(--ink);border-radius:3px;padding:14px 18px;margin:14px 0 18px;display:inline-block;color:var(--ink)}
+.formula small{display:block;font-family:var(--sans);font-size:13px;color:var(--muted);margin-top:4px}
+.frac{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;margin:0 4px}
+.frac>span:first-child{border-bottom:1.5px solid currentColor;padding:0 4px}
+.frac>span{padding:0 4px}
+/* teacher quote: handwriting-in-margin feel */
+.teacher{border-left:4px solid var(--ink);background:#fff;padding:12px 16px;margin:18px 0;font-size:15px}
+.teacher b{color:var(--ink);font-weight:600;display:block;font-size:13px;margin-bottom:2px}
+.trap{border-left:4px solid var(--red);background:#fff;padding:12px 16px;margin:18px 0;font-size:15px}
+.trap b{color:var(--red);font-weight:600;display:block;font-size:13px;margin-bottom:2px}
+.answer{border:1.5px dashed var(--green);background:#fff;padding:12px 16px;margin:18px 0;font-size:15px}
+.answer b{color:var(--green);font-weight:600;display:block;font-size:13px;margin-bottom:2px}
+.answer .en,.answer q{font-family:Georgia,serif;quotes:none}
+table{border-collapse:collapse;background:#fff;margin:10px 0 18px;font-size:15px}
+th,td{border:1px solid #C9D3DF;padding:6px 12px;text-align:center}
+th{background:#EEF2F8;font-weight:600}
+td.l,th.l{text-align:left}
+.lab{background:#fff;border:1.5px solid var(--graphite);border-radius:6px;padding:20px 22px;margin:20px 0 26px;box-shadow:4px 4px 0 var(--ink-soft)}
+.lab h4{margin:0 0 4px;font-size:16px;color:var(--ink)}
+.lab .hint{font-size:13px;color:var(--muted);margin-bottom:12px}
+.row{display:flex;flex-wrap:wrap;gap:14px 22px;align-items:center}
+.ctrl{display:flex;flex-direction:column;font-size:13px;color:var(--muted);min-width:160px}
+.ctrl output{color:var(--graphite);font-weight:600;font-variant-numeric:tabular-nums}
+input[type=range]{accent-color:var(--ink);width:180px}
+input[type=number]{width:74px;font:inherit;font-size:15px;padding:3px 6px;border:1px solid #AEB8C6;border-radius:3px;text-align:center}
+select{font:inherit;font-size:14px;padding:4px 6px;border:1px solid #AEB8C6;border-radius:3px;background:#fff}
+button{font:inherit;font-size:14px;padding:6px 14px;border:1.5px solid var(--ink);background:#fff;color:var(--ink);border-radius:4px;cursor:pointer}
+button:hover{background:var(--ink-soft)}
+button.on{background:var(--ink);color:#fff}
+.seg{display:inline-flex;flex-wrap:wrap;gap:6px}
+.big{font-family:Georgia,serif;font-size:30px;color:var(--ink);font-variant-numeric:tabular-nums}
+.out{font-size:15px;margin-top:10px}
+.warn{color:var(--red);font-weight:600}
+.ok{color:var(--green);font-weight:600}
+svg text{font-family:var(--sans)}
+.calc{font-family:Georgia,serif;background:#20242B;color:#E8F0D8;padding:8px 12px;border-radius:4px;display:inline-block;font-size:15px;margin:4px 0}
+/* hero */
+.hero{max-width:980px;margin-bottom:90px}
+.hero .kicker{font-size:15px;color:var(--muted)}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin:22px 0 8px;border-top:2px solid var(--ink)}
+.steps div{padding:10px 12px 0 0;font-size:14px}
+.steps div strong{display:block;font-family:var(--serif);font-size:18px;color:var(--ink)}
+/* map */
+.map{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin:14px 0}
+.map a{display:block;background:#fff;border:1px solid #C9D3DF;padding:10px 12px;text-decoration:none;color:var(--graphite);border-radius:4px;font-size:14px}
+.map a:hover{border-color:var(--ink)}
+.map a b{font-family:Georgia,serif;color:var(--ink);margin-right:6px}
+.map a span{display:block;color:var(--muted);font-size:12.5px}
+.map a.cut{border-style:dashed}
+/* cards for signal words */
+.reveal{background:#fff;border:1px solid #C9D3DF;border-radius:4px;margin:8px 0;padding:10px 14px}
+.reveal .q{font-family:Georgia,serif;font-size:16px}
+.reveal .opts{margin-top:8px}
+.reveal .fb{margin-top:6px;font-size:14px;display:none}
+.reveal.done .fb{display:block}
+/* quiz */
+.quiz .item{background:#fff;border:1px solid #C9D3DF;border-radius:4px;padding:14px 16px;margin:12px 0}
+.quiz .item p.qq{font-weight:600;margin-bottom:8px}
+.quiz .item p.qq .en{font-weight:400}
+.quiz label{display:block;padding:5px 8px;border-radius:3px;cursor:pointer;font-size:15px}
+.quiz label:hover{background:#F1F4F9}
+.quiz label.right{background:#E2F2EA}
+.quiz label.wrong{background:#FBE3E6}
+.quiz .ex{display:none;font-size:14px;margin-top:6px;border-top:1px dashed #C9D3DF;padding-top:6px}
+.quiz .item.answered .ex{display:block}
+#score{font-size:18px;font-family:var(--serif);color:var(--ink)}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.sheet td,.sheet th{text-align:left;vertical-align:top}
+.tag{font-size:12px;border:1px solid var(--muted);color:var(--muted);border-radius:3px;padding:0 5px;margin-left:6px;white-space:nowrap}
+.tag.cut{border-color:var(--red);color:var(--red)}
+@media (max-width:860px){
+  .layout{grid-template-columns:1fr}
+  nav.toc{position:static;height:auto;border-right:0;border-bottom:1px solid var(--grid)}
+  nav.toc ol{columns:2}
+  main{padding:24px 16px 80px}
+  h1{font-size:32px}
+  .steps,.cols{grid-template-columns:1fr 1fr}
+}
+@media print{nav.toc{display:none}.layout{display:block}body{background:#fff}}
+</style>
+</head>
+<body>
+<div class="layout">
+<nav class="toc" aria-label="目录">
+  <div class="brand">AP Stats<br>Unit 2 复习本</div>
+  <ol id="tocList">
+    <li><a href="#top"><span class="n">起点</span><span>概率树实验台</span></a></li>
+    <li><a href="#map"><span class="n">地图</span><span>这一单元考什么</span></a></li>
+    <li><a href="#s21"><span class="n">2.1–2.2</span><span>二维表与关联</span></a></li>
+    <li><a href="#s23"><span class="n">2.3</span><span>模拟</span></a></li>
+    <li><a href="#s24"><span class="n">2.4–2.5</span><span>概率基础与互斥</span></a></li>
+    <li><a href="#s26"><span class="n">2.6</span><span>条件概率</span></a></li>
+    <li><a href="#tree"><span class="n">2.6+</span><span>树状图与“反转”题</span></a></li>
+    <li><a href="#s27"><span class="n">2.7</span><span>独立与并集</span></a></li>
+    <li><a href="#s28"><span class="n">2.8</span><span>随机变量与分布</span></a></li>
+    <li><a href="#s29"><span class="n">2.9</span><span>均值与标准差</span></a></li>
+    <li><a href="#lin"><span class="n">补充</span><span>线性变换与组合</span></a></li>
+    <li><a href="#s210"><span class="n">2.10</span><span>二项分布</span></a></li>
+    <li class="sep">考前</li>
+    <li><a href="#frq"><span class="n">FRQ</span><span>答题规范</span></a></li>
+    <li><a href="#quiz"><span class="n">自测</span><span>12 道题</span></a></li>
+    <li><a href="#sheet"><span class="n">速查</span><span>公式与易错</span></a></li>
+  </ol>
+</nav>
+<main>
+
+<!-- ================= HERO ================= -->
+<section class="hero" id="top">
+  <div class="kicker">AP Statistics 新版课程 Unit 2：Probability, Random Variables, and Probability Distributions</div>
+  <h1>先画树，再爬树。</h1>
+  <p class="lede">这是老师在条件概率这一块反复强调的套路。下面这棵树是活的：换一个情景、拖动滑块，看看“已知结果、反推原因”的概率是怎么算出来的。</p>
+  <div class="steps" aria-label="解题四步">
+    <div><strong>定顺序</strong>谁先考虑？“真实情况”在前，“检测/判罚”在后</div>
+    <div><strong>画树</strong>第一层是普通概率，后面每根树杈都是条件概率</div>
+    <div><strong>读问题</strong>given、if、of those who、who… 后面是条件</div>
+    <div><strong>爬树套公式</strong>同时发生 ÷ 条件发生</div>
+  </div>
+
+  <div class="lab" id="treeLab">
+    <div class="row" style="justify-content:space-between">
+      <h4>概率树实验台</h4>
+      <div class="seg" role="group" aria-label="选择情景">
+        <button data-preset="dope" class="on">兴奋剂检测</button>
+        <button data-preset="factory">三家工厂</button>
+        <button data-preset="baseball">棒球裁判</button>
+      </div>
+    </div>
+    <div class="hint" id="treeStory"></div>
+    <div class="row" id="treeSliders"></div>
+    <svg id="treeSvg" viewBox="0 0 900 330" width="100%" role="img" aria-label="概率树"></svg>
+    <div class="out" id="treeOut"></div>
+    <h4 style="margin-top:16px">换成 1000 个人来看</h4>
+    <div class="hint">每个小方格代表 1 个人（或 1 个零件、1 个球）。黄色是所有落在“条件”里的，蓝色是其中我们想要的那一部分。条件概率 = 蓝 ÷ 黄。</div>
+    <svg id="iconSvg" viewBox="0 0 900 190" width="100%" role="img" aria-label="1000 个个体的频数图"></svg>
+  </div>
+</section>
+
+<!-- ================= MAP ================= -->
+<section id="map">
+  <h2>这一单元考什么</h2>
+  <p class="src">依据：2026–27 学年起执行的新版 AP Statistics 课程框架（5 个单元）。老师布置的“2.1–2.3”“2.4–2.7”作业就是按这个编号来的。</p>
+  <p>新版课程把原来的 9 个单元合成 5 个，<b>Unit 2 是“概率、随机变量与概率分布”</b>，选择题占 15–25%。考试变成全数字化（Bluebook），选择题 42 道、每题 4 个选项；FRQ 4 道、每道 10 分，其中有一组题会围绕同一个概率情景出好几问。所以条件概率、随机变量、二项分布这几块，在 FRQ 里会被连着问。</p>
+  <div class="map">
+    <a href="#s21"><b>2.1–2.2</b>两个分类变量<span>二维表、条件比例、关联</span></a>
+    <a href="#s23"><b>2.3</b>用模拟估计概率<span>大数定律、读模拟图</span></a>
+    <a href="#s24"><b>2.4</b>概率入门<span>样本空间、概率模型、补集</span></a>
+    <a href="#s24"><b>2.5</b>互斥事件<span>加法公式</span></a>
+    <a href="#s26"><b>2.6</b>条件概率<span>P(A|B)、乘法公式、树状图</span></a>
+    <a href="#s27"><b>2.7</b>独立事件与并集<span>独立 ≠ 互斥</span></a>
+    <a href="#s28"><b>2.8</b>随机变量与分布<span>离散/连续、合法分布</span></a>
+    <a href="#s29"><b>2.9</b>随机变量的参数<span>期望、方差、标准差</span></a>
+    <a href="#s210"><b>2.10</b>二项分布<span>BINS、公式、计算器</span></a>
+    <a href="#lin" class="cut"><b>补充</b>线性变换与组合随机变量<span>老师讲了；新版考纲据报道不单独考组合</span></a>
+  </div>
+  <p style="font-size:14px;color:var(--muted)">2.11、2.12 之后会进入正态分布与抽样分布（Normal 你在 Unit 1 已经学过）。几家备考机构对新版考纲的解读都说“组合随机变量”和“几何分布”已被移出课程，但老师课上讲了组合随机变量，因为它能解释二项分布的均值和方差公式从哪来。<b>以老师和 AP Classroom 的题为准。</b></p>
+</section>
+
+<!-- ================= 2.1 ================= -->
+<section id="s21">
+  <h2><span class="num">2.1–2.2</span>二维表与“有没有关联”</h2>
+  <p class="lede">二维表的题，先别急着读数字，先看问题问的是哪一种比例。</p>
+  <p>一张二维表（two-way table）里有三种比例：<b>边际（marginal）</b>只看一个变量的总数；<b>联合（joint）</b>是 A 而且 B，分母是总人数；<b>条件（conditional）</b>是“在 B 里面，A 占多少”，分母只是 B 那一行或那一列。</p>
+  <div class="formula">关联（association）的判断：比较条件比例<small>如果不同组里的条件比例一样，就没有关联；不一样，就有关联。</small></div>
+  <div class="teacher"><b>老师在课上说</b>不是“两个格子的数一样”才叫没影响。100 个 junior 里 1 个找工作、500 个 senior 里 5 个找工作，数字不一样，但比例都是 1%，这才叫年级对找工作没影响。</div>
+
+  <div class="lab" id="twLab">
+    <h4>二维表实验台：改数字，看有没有关联</h4>
+    <div class="hint">默认数据来自作业第 3 题（年级 × 是否有工作）。改任意格子，下面的条件比例、分段条形图和结论会实时更新。点上面的按钮可以看每种概率用的是哪几个格子。</div>
+    <table id="twTable" aria-label="可编辑二维表">
+      <thead><tr><th></th><th id="twC1">有工作</th><th id="twC2">没工作</th><th>合计</th></tr></thead>
+      <tbody>
+        <tr><th class="l" id="twR1">Junior</th><td data-c="a"><input type="number" min="0" id="twa" value="13" aria-label="Junior 有工作"></td><td data-c="b"><input type="number" min="0" id="twb" value="5" aria-label="Junior 没工作"></td><td id="twr1"></td></tr>
+        <tr><th class="l" id="twR2">Senior</th><td data-c="c"><input type="number" min="0" id="twc" value="13" aria-label="Senior 有工作"></td><td data-c="d"><input type="number" min="0" id="twd" value="26" aria-label="Senior 没工作"></td><td id="twr2"></td></tr>
+        <tr><th class="l">合计</th><td id="twk1"></td><td id="twk2"></td><td id="twn"></td></tr>
+      </tbody>
+    </table>
+    <div class="seg" role="group" aria-label="选择概率类型">
+      <button data-tw="joint">P(Junior 且 有工作)</button>
+      <button data-tw="c1">P(有工作 | Junior)</button>
+      <button data-tw="c2">P(Junior | 有工作)</button>
+      <button data-tw="m">P(有工作)</button>
+      <button data-tw="or">P(Junior 或 有工作)</button>
+    </div>
+    <div class="out" id="twPick">点一个按钮试试。</div>
+    <svg id="twSvg" viewBox="0 0 640 170" width="100%" role="img" aria-label="分段条形图"></svg>
+    <div class="out" id="twVerdict"></div>
+  </div>
+
+  <h3>反过来出题：已知“没有关联”，求格子</h3>
+  <p>作业第 31 题：如果两个变量没有关联，那每一组里的条件比例都等于边际比例。比如总共 1000 人里有 600 个“是”（60%），某组有 800 人，那这组里“是”的人数 <var>A</var> 应满足 <var>A</var>/800 = 600/1000，所以 <var>A</var> = 480。</p>
+  <div class="teacher"><b>为什么条件比例能和边际比例比？</b>如果 a/b = c/d，那么 (a+c)/(b+d) 也等于它们。所以两个条件比例相等时，边际比例也一定相等；只要有一个不等，就都不等。比较时三个数里任选两个都可以。</div>
+  <div class="trap"><b>易错：答非所问</b>FRQ 问 “Is there an association?”，你算完两个比例后必须写出 “There is an association because…”。老师原话：“你的老板就要你一句话，有没有 association。”这一句就是 1 分。</div>
+</section>
+
+<!-- ================= 2.3 ================= -->
+<section id="s23">
+  <h2><span class="num">2.3</span>用模拟估计概率</h2>
+  <p class="lede">概率是“重复很多很多次之后的长期比例”。短期看起来很乱，长期会稳定下来。</p>
+  <div class="lab" id="simLab">
+    <h4>抛硬币：看“正面比例”怎样稳定到 0.5</h4>
+    <div class="row">
+      <button data-sim="10">再抛 10 次</button><button data-sim="100">再抛 100 次</button><button data-sim="1000">再抛 1000 次</button><button data-sim="0">重来</button>
+      <span id="simStat" class="out" style="margin:0"></span>
+    </div>
+    <svg id="simSvg" viewBox="0 0 700 220" width="100%" role="img" aria-label="正面比例随抛掷次数变化"></svg>
+  </div>
+  <div class="trap"><b>易错：图上不是每个数都有用</b>作业第 12 题问“等待超过 8 分钟”，可图上根本找不到 8 这个数。8 分钟只是“数什么”的限定条件，真正有用的是模拟的次数和频率。出题人故意写成阿拉伯数字 8 来干扰你。</div>
+  <p>读模拟图时问自己：一个点代表什么（一次模拟）？横轴是什么统计量？要的事件对应哪几个柱子？比如“at most 2”就是 0、1、2 三根柱子加起来（它们互斥，可以直接相加）。</p>
+</section>
+
+<!-- ================= 2.4-2.5 ================= -->
+<section id="s24">
+  <h2><span class="num">2.4–2.5</span>概率基础与互斥</h2>
+  <p><b>样本空间</b>（sample space）是所有可能结果的集合。<b>概率模型</b>（probability model）= 样本空间 + 每个结果的概率。一个模型合法（legitimate）要满足两条：每个概率都在 0 到 1 之间，并且全部加起来等于 1。</p>
+  <p>结果等可能时，概率 = 想要的结果数 ÷ 全部结果数。比如掷两颗骰子，和为 5 的组合有 (1,4)(2,3)(3,2)(4,1) 四种，所以 P = 4/36。</p>
+  <div class="cols">
+    <div class="formula">P(A<sup>C</sup>) = 1 − P(A)<small>补集：“至少一个”常用 1 − P(一个都没有)</small></div>
+    <div class="formula">P(A ∪ B) = P(A) + P(B) − P(A ∩ B)<small>一般加法公式；互斥时最后一项是 0</small></div>
+  </div>
+  <p><b>互斥</b>（mutually exclusive / disjoint）：两件事不能同时发生，P(A ∩ B) = 0。在韦恩图里是两个不相交的圈。</p>
+</section>
+
+<!-- ================= 2.6 ================= -->
+<section id="s26">
+  <h2><span class="num">2.6</span>条件概率</h2>
+  <p class="lede">竖线后面是已经发生的事，也就是条件。整个单元几乎只有这一个公式需要记。</p>
+  <div class="formula">P(A | B) = <span class="frac"><span>P(A ∩ B)</span><span>P(B)</span></span> &nbsp;&nbsp;⇔&nbsp;&nbsp; P(A ∩ B) = P(B) · P(A | B)<small>已知条件概率求“同时发生”用乘法；已知同时发生求条件概率用除法</small></div>
+  <p>乘法形式更好理解：两件事同时发生，就是先让第一件事发生，再在它已经发生的前提下让第二件事发生。这正是树状图里“沿着一条路径一直乘下去”。</p>
+
+  <h3>不一定要套公式：把条件“翻译”出来</h3>
+  <p>例：一班 28 人里有 4 个左撇子，不放回地随机抽两人，两人都是左撇子的概率？已经抽走一个左撇子之后，只剩 27 人、3 个左撇子，所以第二根树杈是 3/27。</p>
+  <div class="formula">P(两人都是左撇子) = <span class="frac"><span>4</span><span>28</span></span> × <span class="frac"><span>3</span><span>27</span></span> ≈ 0.0159</div>
+  <p>例（11 月 9 日课上）：抛三枚硬币，已知正面比反面多，三枚都是正面的概率？“正面比反面多”只有 HHH、HHT、HTH、THH 四种，其余的直接划掉，所以答案是 1/4。用公式算也一样：(1/8) ÷ (4/8) = 1/4。</p>
+
+  <h3>信号词：怎么读出“谁是条件”</h3>
+  <p>统计考试里，计算往往不是最难的，读题才是。点一点下面每一句，判断它问的是哪种概率。</p>
+  <div id="signals"></div>
+  <div class="trap"><b>老师也觉得有争议的题</b>11 月 2 日讲的 FRQ：“percentage of non-fraudulent transactions that occurred when a PIN was used”。按语法，when 后面的 PIN 应该是条件，培训教授也这么认为；但答案把 non-fraudulent 当成了条件，而且和同一套卷子里另一道题的处理不一致。老师的意思是：先领会精神，考场上遇到这种写法，仔细判断“在哪一群人里面算比例”。</div>
+</section>
+
+<!-- ================= TREE ================= -->
+<section id="tree">
+  <h2><span class="num">2.6+</span>树状图与“反转”题</h2>
+  <p class="lede">老师说这是条件概率里最麻烦的题型：题目给的是 P(检测结果 | 真实情况)，问的却是 P(真实情况 | 检测结果)。</p>
+  <p>难点在于两件事未必有时间上的先后，<mark>你要自己决定先考虑哪个变量</mark>。判断方法：题目里的“误判率”“坏品率”是在谁的前提下给的？“没服药的人里有 1% 被测成阳性”，说明要先分有没有服药，再分阴阳。所以第一层是真实情况，第二层是检测/判罚结果。</p>
+  <table>
+    <thead><tr><th class="l">题目</th><th>第一层（先考虑）</th><th>第二层</th><th>问的是</th><th>答案</th></tr></thead>
+    <tbody>
+      <tr><td class="l">兴奋剂检测</td><td>服药 2% / 没服药 98%</td><td>阳性 / 阴性</td><td>P(服药 | 阳性)</td><td>≈ 0.67</td></tr>
+      <tr><td class="l">三家工厂</td><td>A 30% / B 20% / C 50%</td><td>坏 / 好</td><td>P(坏)，P(A | 坏)</td><td>0.08，0.375</td></tr>
+      <tr><td class="l">棒球裁判</td><td>投进好球区 52.6% / 没进</td><td>判 strike / 判 ball</td><td>P(进 | 判 ball)</td><td>≈ 0.023</td></tr>
+    </tbody>
+  </table>
+  <p>回到页面开头的<a href="#treeLab">概率树实验台</a>，三道题都可以在那里一步一步看。</p>
+  <h3>假阳性、假阴性</h3>
+  <p><b>False positive</b>：本来没事，却测成阳性（没服药却阳了）。<b>False negative</b>：本来有事，却测成阴性。之后学假设检验时，它们会对应 Type I error 和 Type II error。</p>
+  <div class="teacher"><b>为什么阳性了也只有约 2/3 的把握？</b>服药的人本来就只有 2%，98% 的干净运动员里哪怕只有 1% 被误判，人数也不少。所以兴奋剂检测会保留几份尿样，第一次阳性再测第二次、第三次；连续三次都是假阳性的可能性就非常小了。把实验台里“服药比例”往上拖，看看这个概率怎么变。</div>
+  <div class="answer"><b>考试写法（三步）</b>1）写出要算的事件：P(in | called ball)；2）写公式：P(in ∩ ball) / P(ball)；3）代数：(0.526)(0.02) / [(0.526)(0.02) + (0.474)(0.95)] ≈ 0.023。树画在草稿纸上，自己看得懂就行。</div>
+</section>
+
+<!-- ================= 2.7 ================= -->
+<section id="s27">
+  <h2><span class="num">2.7</span>独立事件与并集</h2>
+  <p><b>独立</b>（independent）：一件事发生与否，不改变另一件事的概率。</p>
+  <div class="cols">
+    <div class="formula">P(A | B) = P(A)<small>定义：知道 B 发生了，A 的概率不变</small></div>
+    <div class="formula">P(A ∩ B) = P(A) · P(B)<small>只在独立时成立；也可以用来检验独立</small></div>
+  </div>
+  <p>火箭有 6 个独立运作的部件，每个正常工作的概率是 0.977，火箭要 6 个都正常才能发射：P = 0.977<sup>6</sup> ≈ 0.870。因为独立，所以“同时发生”可以直接连乘。</p>
+
+  <h3>独立 ≠ 互斥，这是最常考的概念题</h3>
+  <svg viewBox="0 0 760 190" width="100%" role="img" aria-label="互斥与独立对比">
+    <g transform="translate(20,10)">
+      <rect width="340" height="170" fill="#fff" stroke="#2E3440"/>
+      <circle cx="110" cy="85" r="55" fill="#DCE4F7" stroke="#1E3A8A" stroke-width="2"/>
+      <circle cx="235" cy="85" r="55" fill="#FFE36E" fill-opacity=".7" stroke="#2E3440" stroke-width="2"/>
+      <text x="110" y="90" text-anchor="middle" font-size="18">A</text><text x="235" y="90" text-anchor="middle" font-size="18">B</text>
+      <text x="170" y="162" text-anchor="middle" font-size="13" fill="#C8283C">互斥：A 发生 ⇒ B 一定不发生（影响很大）</text>
+    </g>
+    <g transform="translate(400,10)">
+      <rect width="340" height="170" fill="#fff" stroke="#2E3440"/>
+      <circle cx="140" cy="80" r="60" fill="#DCE4F7" stroke="#1E3A8A" stroke-width="2"/>
+      <circle cx="200" cy="80" r="60" fill="#FFE36E" fill-opacity=".7" stroke="#2E3440" stroke-width="2"/>
+      <text x="115" y="85" text-anchor="middle" font-size="18">A</text><text x="225" y="85" text-anchor="middle" font-size="18">B</text>
+      <text x="170" y="162" text-anchor="middle" font-size="13" fill="#2F7D5B">独立：一定有交集，且交集 = P(A)·P(B)</text>
+    </g>
+  </svg>
+  <div class="teacher"><b>老师的解释</b>直觉上会觉得“独立”就是两个圈分开。恰恰相反：两个圈分开叫互斥，我发生了你就不能发生，这是最强烈的“互相影响”。所以（概率都不为 0 时）<b>互斥的事件一定不独立</b>。</div>
+  <p>11 月 9 日讲的转盘题（12 格，7 蓝 5 橙，前 4 次已经转出结果）：每次转动互相独立，前面转出什么都不影响下一次。下一次转到蓝色的概率仍然是 7/12，连续两次都是蓝的概率是 (7/12)<sup>2</sup>，比连续两次橙的 (5/12)<sup>2</sup> 大。“别人给你介绍一个游戏，你就按他描述的规则继续玩下去。”</p>
+</section>
+
+<!-- ================= 2.8 ================= -->
+<section id="s28">
+  <h2><span class="num">2.8</span>随机变量与概率分布</h2>
+  <p class="lede">随机变量和概率模型几乎一样，只多一个要求：它的取值必须是数字。</p>
+  <p>抛三枚硬币，样本空间是 {HHH, HHT, …, TTT}，这些是结果，不是数字。定义 <var>X</var> = 正面的个数，<var>X</var> 就是一个<b>随机变量</b>（random variable），取值 0、1、2、3，对应概率 1/8、3/8、3/8、1/8。列出所有取值和对应概率，就是它的<b>概率分布</b>（probability distribution）。</p>
+  <table>
+    <tr><th>x</th><td>0</td><td>1</td><td>2</td><td>3</td></tr>
+    <tr><th>P(X = x)</th><td>1/8</td><td>3/8</td><td>3/8</td><td>1/8</td></tr>
+  </table>
+  <p><b>离散</b>（discrete）随机变量绝大多数时候是在“数东西”（count），<b>连续</b>（continuous）随机变量可以取一个区间里的任何值，比如身高，正态分布就是连续分布。</p>
+  <div class="trap"><b>易错：离散 ≠ 有限</b>买麦片攒齐 5 张球星卡需要买几盒？最少 5 盒，但没有上限，运气差的人可能一辈子攒不齐。它的取值是 5、6、7……无穷多个，但仍然是离散的。</div>
+  <div class="trap"><b>易错：计算器不会替你检查分布</b>老师课上演示过：把 0.001 误输成 0.1，概率加起来不等于 1 了，TI-84 和 Nspire 都<b>不报错</b>，而是悄悄把概率按比例缩放成和为 1，再算出一个错的均值。所以先自己检查“每个都在 0 到 1 之间、加起来等于 1”，题目也可能故意给一个不合法的分布来坑你。</div>
+</section>
+
+<!-- ================= 2.9 ================= -->
+<section id="s29">
+  <h2><span class="num">2.9</span>均值（期望）与标准差</h2>
+  <p class="lede">每个取值出现的概率不一样了，所以不能“加起来除以个数”，要用加权平均，和算 GPA 一样。</p>
+  <div class="cols">
+    <div class="formula">μ<sub>X</sub> = E(X) = Σ x<sub>i</sub> p<sub>i</sub><small>均值 mean，也叫期望 expected value</small></div>
+    <div class="formula">σ<sub>X</sub><sup>2</sup> = Σ (x<sub>i</sub> − μ<sub>X</sub>)<sup>2</sup> p<sub>i</sub><small>方差；标准差 σ<sub>X</sub> 是它开根号</small></div>
+  </div>
+  <p>和样本方差对比：原来的“除以 n − 1”可以理解成给每个数据配同样的权重，现在换成给每个取值配权重 p<sub>i</sub>。考试会给公式表，实际计算用计算器：把取值输进 L1、概率输进 L2，用 1-Var Stats，频率列（FrequencyList）选 L2。这时输出里没有 Sx，只有 σx，因为这是一个完整的分布，不是样本。</p>
+
+  <div class="lab" id="distLab">
+    <h4>分布实验台：改概率，看均值和标准差</h4>
+    <div class="hint">直方图里蓝线是均值，浅蓝区是均值 ± 1 个标准差。试着把一个概率改错，看看会发生什么。</div>
+    <div class="seg" role="group" aria-label="选择分布">
+      <button data-dist="apgar" class="on">新生儿 Apgar 评分</button>
+      <button data-dist="pete">Pete 旅游团每天人数</button>
+      <button data-dist="roulette">轮盘押红色的收益</button>
+      <button data-dist="coin">三枚硬币的正面数</button>
+    </div>
+    <div id="distTable" style="overflow-x:auto;margin-top:12px"></div>
+    <svg id="distSvg" viewBox="0 0 700 230" width="100%" role="img" aria-label="概率分布直方图"></svg>
+    <div class="out" id="distOut"></div>
+  </div>
+
+  <h3>期望值怎么解释</h3>
+  <p>轮盘有 38 格（18 红、18 黑、2 绿），押 1 元在红色上，中了赢 1 元，没中输 1 元。</p>
+  <div class="formula">E(X) = (+1)(18/38) + (−1)(20/38) ≈ −0.053 元</div>
+  <p>玩一次不可能输 5 分钱。期望值的意思是：<mark>玩很多很多次，平均每次大约输 0.053 元</mark>。赌场就是靠这个赚钱，比如一天押了 10 万次，赌场平均收入约 0.053 × 100000 ≈ 5300 元。</p>
+  <div class="answer"><b>解释模板</b><span class="en">Mean: “If we [repeat the process] many, many times, the average [variable in context] would be about μ.”<br>SD: “The [variable in context] typically varies from the mean of μ by about σ.”</span><br>Apgar 例子：<span class="en">The Apgar score of a randomly selected newborn typically varies from the mean of 8.128 by about 1.437 points.</span></div>
+</section>
+
+<!-- ================= LINEAR / COMBINE ================= -->
+<section id="lin">
+  <h2><span class="num">补充</span>线性变换与组合随机变量</h2>
+  <p class="src">老师 11 月 4–5 日讲的内容。几家备考机构对新版考纲的解读说“组合随机变量”已不单独考，但它是二项分布 μ = np、σ² = np(1−p) 的推导基础，老师也说“这些计算对后面的理解非常有帮助”。</p>
+  <h3>线性变换：Y = aX + b</h3>
+  <p>Pete 的旅游团每天来 <var>X</var> 人（2–6 人，均值 3.75，标准差 1.090）。每人收 150 元，每天成本 100 元，那么每天利润 <var>Y</var> = 150<var>X</var> − 100。</p>
+  <div class="cols">
+    <div class="formula">μ<sub>Y</sub> = a·μ<sub>X</sub> + b<small>“均值最听话”：对 X 做什么，就对均值做什么</small></div>
+    <div class="formula">σ<sub>Y</sub> = |a|·σ<sub>X</sub><small>加减常数 b 只是平移，不改变分散程度；方差乘 a²</small></div>
+  </div>
+  <div class="lab" id="linLab">
+    <h4>拖动 a 和 b，看分布怎么平移、拉伸</h4>
+    <div class="row">
+      <label class="ctrl">乘 a（每人票价）<input type="range" id="linA" min="-200" max="200" step="10" value="150"><output id="linAo"></output></label>
+      <label class="ctrl">加 b（每天固定加减）<input type="range" id="linB" min="-300" max="300" step="50" value="-100"><output id="linBo"></output></label>
+    </div>
+    <svg id="linSvg" viewBox="0 0 700 250" width="100%" role="img" aria-label="线性变换前后"></svg>
+    <div class="out" id="linOut"></div>
+  </div>
+
+  <h3>两个随机变量相加、相减</h3>
+  <p>Pete 的姐姐 Erin 在另一个城市也开了旅游团，每天 <var>Y</var> 人，均值 3.10，标准差 0.943。两人开在相隔很远的城市，不会抢客，所以 <var>X</var> 和 <var>Y</var> 独立。</p>
+  <div class="cols">
+    <div class="formula">μ<sub>X±Y</sub> = μ<sub>X</sub> ± μ<sub>Y</sub><small>均值永远可以直接加减，不需要独立</small></div>
+    <div class="formula">σ<sup>2</sup><sub>X±Y</sub> = σ<sup>2</sup><sub>X</sub> + σ<sup>2</sup><sub>Y</sub><small>前提：X、Y 独立；不管加还是减，方差都是相加</small></div>
+  </div>
+  <p>总人数 <var>X</var> + <var>Y</var>：均值 3.75 + 3.10 = 6.85；方差 1.1875 + 0.89 = 2.0775，标准差 ≈ 1.441。老师把 <var>X</var> + <var>Y</var> 的完整分布一格一格算出来验证过，结果一致。</p>
+  <div class="trap"><b>两个最容易丢分的点</b>第一，<b>不独立就不能把方差相加</b>。题目没说独立时，均值照算，标准差算不了，要写出“假设独立”。第二，<b>相减时方差也是相加</b>，用老师的话说，“天王老子来了也是加”：偏离只会越累积越多，不会被抵消。最后再开根号，标准差本身不能直接相加。</div>
+  <p>为什么必须独立？比较 <var>X</var> + <var>X</var> 和 2<var>X</var>：它们是同一个东西，按线性变换 Var(2<var>X</var>) = 4Var(<var>X</var>)。如果误把两个 <var>X</var> 当成独立的来加，会得到 2Var(<var>X</var>)，<mark>低估了方差</mark>。之后算置信区间时，低估方差意味着区间太窄、结论出错。</p>
+  <h3>正态 ± 正态 仍是正态</h3>
+  <p>例：<var>X</var> ~ N(5, 2)，<var>Y</var> ~ N(3, 1)，二者独立，<var>D</var> = <var>X</var> − <var>Y</var>。</p>
+  <div class="formula">μ<sub>D</sub> = 5 − 3 = 2，σ<sub>D</sub> = √(2² + 1²) = √5 ≈ 2.236<small>D ~ N(2, √5)，P(1 &lt; D &lt; 3) = normalcdf(1, 3, 2, √5) ≈ 0.345</small></div>
+</section>
+
+<!-- ================= 2.10 ================= -->
+<section id="s210" class="wide">
+  <h2><span class="num">2.10</span>二项分布</h2>
+  <p class="lede">抽 100 包卡能抽到几张 SSR？做 n 次实验能成功几次？这类“数成功次数”的问题就是二项分布。</p>
+  <h3>先判断：BINS</h3>
+  <table>
+    <thead><tr><th class="l">字母</th><th class="l">条件</th><th class="l">意思</th></tr></thead>
+    <tbody>
+      <tr><td class="l"><b>B</b></td><td class="l">Binary</td><td class="l">每次只有两种结果：成功/失败。可以人为“打包”，比如掷到 6 算成功，1–5 都算失败</td></tr>
+      <tr><td class="l"><b>I</b></td><td class="l">Independent</td><td class="l">每次实验互不影响</td></tr>
+      <tr><td class="l"><b>N</b></td><td class="l">Number of trials</td><td class="l">实验次数 n 事先固定。这是最重要的判断标志</td></tr>
+      <tr><td class="l"><b>S</b></td><td class="l">Same probability of success</td><td class="l">每次成功概率 p 都一样</td></tr>
+    </tbody>
+  </table>
+  <div class="cols">
+    <div>
+      <h3 style="margin-top:6px">是 / 不是二项分布？</h3>
+      <div id="binsCards"></div>
+    </div>
+    <div>
+      <h3 style="margin-top:6px">10% 条件</h3>
+      <p>不放回抽样时，严格说每次的概率都在变。但只要样本量不超过总体的 10%，变化小到可以忽略，仍可以当二项分布处理。今天出生的上万个婴儿里抽 100 个看女孩个数：可以。52 张牌里翻 10 张数 A：不行，4/52 一下子就变成 3/51 了。</p>
+      <p>抽卡有“保底”机制时，既违反了 I（前面抽的结果影响后面），也违反了 S（第 51 抽的概率变了）。</p>
+    </div>
+  </div>
+
+  <h3>公式从哪来</h3>
+  <p>以血型为例：O 型血概率 0.25，一对夫妇有 5 个孩子，<var>X</var> = O 型血孩子数，<var>X</var> ~ B(n = 5, p = 0.25)。要恰好 3 个 O 型：3 个是（0.25³），剩下 2 个必须不是（0.75²），再乘上“从 5 个孩子里选出哪 3 个是 O 型”的选法数。</p>
+  <div class="formula">P(X = k) = C(n, k) · p<sup>k</sup> (1 − p)<sup>n−k</sup>，&nbsp; C(n, k) = <span class="frac"><span>n!</span><span>k!(n−k)!</span></span><small>组合数 C(n, k)，不计顺序；规定 0! = 1；C(n, k) = C(n, n−k)</small></div>
+  <p>P(<var>X</var> = 3) = C(5,3)(0.25)³(0.75)² = 10 × 0.015625 × 0.5625 ≈ 0.0879。</p>
+  <div class="cols">
+    <div class="formula">μ<sub>X</sub> = np</div>
+    <div class="formula">σ<sub>X</sub> = √(np(1 − p))<small>有的书写成 √(npq)，q = 1 − p</small></div>
+  </div>
+  <div class="teacher"><b>“攒碎片”记忆法</b>每抽一次成功概率是 p，相当于每抽一次攒了 p 个“成功碎片”，抽 n 次就攒了 np 个，所以期望成功 np 次。严格推导：每一次抽是一个只取 0 或 1 的随机变量，均值 p、方差 p(1−p)；n 次独立相加，均值 np、方差 np(1−p)。这就是组合随机变量的用处。</div>
+
+  <div class="lab" id="binLab">
+    <h4>二项分布计算器：选区间，同时看计算器怎么按</h4>
+    <div class="hint">默认是血型那道题。最容易错的是 TI-84 的 binomcdf：它只能算 P(X ≤ x)，“≥”“&gt;”“之间”都要自己转换。</div>
+    <div class="row">
+      <label class="ctrl">n（次数）<input type="range" id="bn" min="1" max="40" value="5"><output id="bno"></output></label>
+      <label class="ctrl">p（每次成功概率）<input type="range" id="bp" min="0.01" max="0.99" step="0.01" value="0.25"><output id="bpo"></output></label>
+      <label class="ctrl">事件
+        <select id="bop">
+          <option value="eq">X = a</option><option value="le">X ≤ a</option><option value="lt">X &lt; a</option>
+          <option value="ge" selected>X ≥ a</option><option value="gt">X &gt; a</option><option value="btw">a ≤ X ≤ b</option>
+        </select></label>
+      <label class="ctrl">a <input type="number" id="ba" value="2" min="0"></label>
+      <label class="ctrl" id="bbWrap">b <input type="number" id="bb" value="4" min="0"></label>
+    </div>
+    <svg id="binSvg" viewBox="0 0 900 240" width="100%" role="img" aria-label="二项分布柱状图"></svg>
+    <div class="out" id="binOut"></div>
+  </div>
+  <div class="answer"><b>FRQ 的最低要求</b>写出分布和参数：<span class="en">“Let X = number of children with type O blood. X ~ Binomial(n = 5, p = 0.25).”</span> 老师强调写 <span class="en">n = 5, p = 0.25</span>，不要只写 “5, 0.25”，这代表你判断过它确实是二项分布。另外 success 是谁要看清，题目有时把“不是 O 型”定义成 success。</div>
+  <p style="font-size:14px;color:var(--muted)">对比：反复翻牌直到翻出第一张 A 为止，数翻了几张。次数不固定，违反 N，不是二项分布（这是几何分布的情景，据报道新版考纲已不再要求）。</p>
+</section>
+
+<!-- ================= FRQ ================= -->
+<section id="frq">
+  <h2>FRQ 答题规范</h2>
+  <p class="lede">老师的观察：“碰到计算你们一般都 OK，但 interpretation、explain 反而容易出问题。”新版 FRQ 是打字作答，每题 10 分，评分对写法很较真。</p>
+  <table class="sheet">
+    <thead><tr><th>题目动词</th><th>必须做到</th><th>反例（会丢分）</th></tr></thead>
+    <tbody>
+      <tr><td><b class="en">Calculate</b></td><td>写出计算过程：谁加谁、除以谁，再给结果。小数或百分数都可以</td><td>只写一个 “10.1%”</td></tr>
+      <tr><td><b class="en">Compare</b></td><td><b>Numerically compare</b>：写出两边的具体数值，再说谁大</td><td>“Associate 的中位数比 Bachelor 小”，没写 35000 和 60000</td></tr>
+      <tr><td><b class="en">Determine / Is there…</b></td><td>正面回答问题：“Yes, Julia's belief is supported…” / “There is an association…”，再给理由</td><td>算了两个比例说“不相等”就结束</td></tr>
+      <tr><td><b class="en">Interpret / Explain</b></td><td>结合情景（in context），带单位，用题目里的变量名</td><td>“35 &lt; 60”，没说是年收入 35000 美元</td></tr>
+      <tr><td><b>概率计算</b></td><td>写事件符号 P(A | B) → 公式 → 代数</td><td>漏括号：0+0÷170 应写成 (0+0)/170</td></tr>
+      <tr><td><b>二项分布</b></td><td>定义 X，写出 Binomial(n = …, p = …)，再给计算器命令或公式</td><td>只写 binomcdf(5, .25, 1)</td></tr>
+    </tbody>
+  </table>
+  <div class="teacher"><b>老师的做法</b>“即使你写对了，也对着正确答案再过一遍，看看人家的话是怎么说的更顺。”另外在题目里把 <span class="en">not</span>、<span class="en">at least</span>、<span class="en">at most</span> 圈出来：作业第 10 题的 “at least one year” 包括 “1–3 年” 和 “3 年以上” 两栏（58 + 20 = 78），只看一栏就错了。“千万别半场开香槟。”</div>
+</section>
+
+<!-- ================= QUIZ ================= -->
+<section id="quiz">
+  <h2>自测 12 题</h2>
+  <p class="lede">4 个选项，和新版考试一样。选完立刻看到解析。</p>
+  <div class="quiz" id="quizBox"></div>
+  <p id="score"></p>
+  <button id="quizReset">清空重做</button>
+</section>
+
+<!-- ================= SHEET ================= -->
+<section id="sheet">
+  <h2>速查：公式与易错</h2>
+  <table class="sheet">
+    <tbody>
+      <tr><th>条件概率</th><td>P(A | B) = P(A ∩ B) / P(B)；P(A ∩ B) = P(B)·P(A | B)</td></tr>
+      <tr><th>加法公式</th><td>P(A ∪ B) = P(A) + P(B) − P(A ∩ B)；互斥时 P(A ∩ B) = 0</td></tr>
+      <tr><th>独立</th><td>P(A | B) = P(A) 或 P(A ∩ B) = P(A)P(B)；互斥（且概率非 0）⇒ 不独立</td></tr>
+      <tr><th>关联</th><td>比较条件比例（或条件比例 vs 边际比例），相等就无关联</td></tr>
+      <tr><th>离散分布</th><td>每个 p 在 [0,1]，Σp = 1；μ = Σxp；σ² = Σ(x − μ)²p</td></tr>
+      <tr><th>线性变换</th><td>μ<sub>aX+b</sub> = aμ<sub>X</sub> + b；σ<sub>aX+b</sub> = |a|σ<sub>X</sub></td></tr>
+      <tr><th>组合</th><td>μ<sub>X±Y</sub> = μ<sub>X</sub> ± μ<sub>Y</sub>；独立时 σ²<sub>X±Y</sub> = σ²<sub>X</sub> + σ²<sub>Y</sub></td></tr>
+      <tr><th>二项</th><td>BINS；P(X = k) = C(n,k)p<sup>k</sup>(1−p)<sup>n−k</sup>；μ = np；σ = √(np(1−p))；10% 条件</td></tr>
+      <tr><th>TI-84 cdf</th><td>P(X ≥ k) = 1 − binomcdf(n,p,k−1)；P(a ≤ X ≤ b) = binomcdf(n,p,b) − binomcdf(n,p,a−1)</td></tr>
+    </tbody>
+  </table>
+  <h3>易错清单</h3>
+  <p>1. A 且 B、A 或 B、A | B、B | A 搞混。每道题先问自己是哪一种。<br>
+  2. 反转题里树画反了：先分“真实情况”，再分“检测/判罚”。<br>
+  3. 把“独立”当成“两个圈分开”。<br>
+  4. 没检查分布合法就按计算器，计算器不会报错。<br>
+  5. 不独立就把方差相加；相减时把方差也相减；直接把标准差相加。<br>
+  6. TI-84 binomcdf 的 x 值输错（≥2 应输 1）。<br>
+  7. 被无关数字干扰（“8 minutes”）。<br>
+  8. FRQ 没正面回答、没写数值比较、没写计算过程、没结合情景。</p>
+</section>
+
+</main>
+</div>
+
+<script>
+(function(){
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const NS='http://www.w3.org/2000/svg';
+const C={ink:'#1E3A8A',inkSoft:'#DCE4F7',hl:'#FFE36E',red:'#C8283C',green:'#2F7D5B',g:'#2E3440',m:'#5B6472',light:'#E3E8EF'};
+function el(tag,attrs,parent,text){const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);if(text!=null)e.textContent=text;if(parent)parent.appendChild(e);return e;}
+function clear(svg){while(svg.firstChild)svg.removeChild(svg.firstChild);}
+const f=(x,d=4)=>{if(!isFinite(x))return '—';let s=(+x).toFixed(d);return s.replace(/(\.\d*?)0+$/,'$1').replace(/\.$/,'');};
+
+/* ============ TREE LAB ============ */
+const presets={
+ dope:{story:'一项兴奋剂检测：2% 的运动员真的服了药。服药的人有 99.5% 会被测成阳性（假阴性 0.5%）；没服药的人有 1% 会被误测成阳性（假阳性）。问：一个人测出阳性，他真的服药的概率是多少？',
+   l1:[['服药',.02],['没服药',.98]],out:['阳性','阴性'],cond:[.995,.01],condLabel:['P(阳性 | 服药)','P(阳性 | 没服药) 假阳性率'],l1slider:'服药比例',unit:'个人'},
+ factory:{story:'零件 30% 来自工厂 A、20% 来自 B、50% 来自 C。三家的坏品率分别是 10%、5%、8%。问：随机抽一个零件是坏的概率？已知是坏的，它来自 A（或 B、C）的概率？',
+   l1:[['A',.3],['B',.2],['C',.5]],out:['坏','好'],cond:[.1,.05,.08],condLabel:['A 的坏品率','B 的坏品率','C 的坏品率'],unit:'个零件'},
+ baseball:{story:'投手有 52.6% 的球投进好球区（in）。投进的球裁判有 2% 会误判成 ball；没投进的球（out）裁判有 5% 误判成 strike，也就是 95% 判成 ball。问：如果这一球被判了 ball，它其实投进了好球区的概率？',
+   l1:[['进好球区',.526],['没进',.474]],out:['判 ball','判 strike'],cond:[.02,.95],condLabel:['P(判 ball | 进)','P(判 ball | 没进)'],l1slider:'投进好球区的比例',unit:'个球'}
+};
+let T=null, target=0;
+function loadPreset(k){
+  const p=presets[k]; T=JSON.parse(JSON.stringify(p)); target=0;
+  $$('#treeLab [data-preset]').forEach(b=>b.classList.toggle('on',b.dataset.preset===k));
+  $('#treeStory').textContent=p.story;
+  const box=$('#treeSliders'); box.innerHTML='';
+  if(T.l1.length===2){
+    box.appendChild(slider(T.l1slider,0.001,0.99,0.001,T.l1[0][1],v=>{T.l1[0][1]=v;T.l1[1][1]=+(1-v).toFixed(4);drawTree();}));
+  }
+  T.cond.forEach((c,i)=>box.appendChild(slider(T.condLabel[i],0,1,0.001,c,v=>{T.cond[i]=v;drawTree();})));
+  const sel=document.createElement('label');sel.className='ctrl';sel.textContent='要反推的是';
+  const s=document.createElement('select');T.l1.forEach((b,i)=>{const o=document.createElement('option');o.value=i;o.textContent=b[0];s.appendChild(o);});
+  s.onchange=()=>{target=+s.value;drawTree();};sel.appendChild(s);box.appendChild(sel);
+  drawTree();
+}
+function slider(label,min,max,step,val,cb){
+  const l=document.createElement('label');l.className='ctrl';
+  const o=document.createElement('output');
+  const i=document.createElement('input');i.type='range';i.min=min;i.max=max;i.step=step;i.value=val;
+  const upd=()=>{o.textContent=f(+i.value,3);};i.oninput=()=>{upd();cb(+i.value);};upd();
+  l.append(label,i,o);return l;
+}
+function drawTree(){
+  const svg=$('#treeSvg');clear(svg);
+  const n=T.l1.length, leaves=n*2, top=34, bottom=300, gap=(bottom-top)/(leaves-1);
+  const root={x:40,y:(top+bottom)/2};
+  el('circle',{cx:root.x,cy:root.y,r:6,fill:C.g},svg);
+  let num=0,den=0; const rows=[];
+  T.l1.forEach((b,i)=>{
+    const ly=[top+gap*(2*i),top+gap*(2*i+1)], my=(ly[0]+ly[1])/2, mx=250;
+    el('line',{x1:root.x,y1:root.y,x2:mx,y2:my,stroke:C.g,'stroke-width':i===target?3:1.5},svg);
+    lab(svg,(root.x+mx)/2,(root.y+my)/2-6,f(b[1],3));
+    el('text',{x:mx+8,y:my+5,'font-size':15,'font-weight':600,fill:C.g},svg,b[0]);
+    [0,1].forEach(j=>{
+      const pc=j===0?T.cond[i]:1-T.cond[i], lx=470, y=ly[j];
+      const prod=b[1]*pc, given=j===0, isT=given&&i===target;
+      if(given)den+=prod; if(isT)num=prod;
+      if(given) el('rect',{x:lx-4,y:y-15,width:420,height:28,fill:C.hl,rx:3},svg);
+      el('line',{x1:mx+mxw(b[0]),y1:my,x2:lx,y2:y,stroke:isT?C.ink:C.g,'stroke-width':isT?3.5:1.5},svg);
+      lab(svg,(mx+mxw(b[0])+lx)/2,(my+y)/2-6,f(pc,3));
+      el('text',{x:lx+4,y:y+5,'font-size':14,fill:C.g,'font-weight':given?600:400},svg,T.out[j]);
+      el('text',{x:lx+80,y:y+5,'font-size':14,fill:isT?C.ink:C.m,'font-weight':isT?700:400},svg,`${f(b[1],3)} × ${f(pc,3)} = ${f(prod,5)}`);
+      rows.push({i,j,prod,given,isT});
+    });
+  });
+  el('text',{x:470,y:18,'font-size':12,fill:C.m},svg,'沿路径相乘 = 两件事同时发生的概率');
+  const res=den>0?num/den:NaN;
+  const g=T.out[0], t=T.l1[target][0];
+  const terms=T.l1.map((b,i)=>`(${f(b[1],3)})(${f(T.cond[i],3)})`).join(' + ');
+  $('#treeOut').innerHTML=`<div>P(${g}) = ${terms} = <b>${f(den,5)}</b>　<span style="color:var(--muted)">所有黄色路径加起来</span></div>
+   <div style="margin-top:6px">P(${t} | ${g}) = <span class="frac"><span>P(${t} ∩ ${g})</span><span>P(${g})</span></span> = <span class="frac"><span>${f(num,5)}</span><span>${f(den,5)}</span></span> = <span class="big">${f(res,4)}</span></div>`;
+  drawIcons(rows,den,num,g,t);
+}
+function mxw(s){return 18+s.length*15;}
+function lab(svg,x,y,t){const tx=el('text',{x,y,'font-size':13,'text-anchor':'middle',fill:C.ink,'font-family':'Georgia,serif'},svg,t);}
+function drawIcons(rows,den,num,g,t){
+  const svg=$('#iconSvg');clear(svg);svg.setAttribute('viewBox','0 0 900 130');
+  // allocate 1000 by largest remainder
+  const raw=rows.map(r=>r.prod*1000);let cnt=raw.map(Math.floor);let left=1000-cnt.reduce((a,b)=>a+b,0);
+  raw.map((v,k)=>[v-Math.floor(v),k]).sort((a,b)=>b[0]-a[0]).slice(0,left).forEach(([,k])=>cnt[k]++);
+  let nT=0,nG=0;rows.forEach((r,k)=>{if(r.isT)nT+=cnt[k];if(r.given)nG+=cnt[k];});
+  const cells=[];for(let k=0;k<nT;k++)cells.push(C.ink);for(let k=0;k<nG-nT;k++)cells.push(C.hl);while(cells.length<1000)cells.push(C.light);
+  cells.forEach((c,k)=>{const col=k%100,row=Math.floor(k/100);el('rect',{x:col*9,y:row*9,width:7.5,height:7.5,fill:c},svg);});
+  el('text',{x:0,y:118,'font-size':14,fill:C.g},svg,`1000 ${T.unit}里，约 ${nG} 个属于“${g}”（黄+蓝），其中约 ${nT} 个是“${t}”（蓝）。${nT} ÷ ${nG} ≈ ${nG?f(nT/nG,3):'—'}`);
+}
+$$('#treeLab [data-preset]').forEach(b=>b.onclick=()=>loadPreset(b.dataset.preset));
+loadPreset('dope');
+
+/* ============ TWO-WAY ============ */
+let twMode=null;
+function tw(){
+  const v=k=>Math.max(0,+$('#tw'+k).value||0);
+  const a=v('a'),b=v('b'),c=v('c'),d=v('d');
+  const r1=a+b,r2=c+d,k1=a+c,k2=b+d,n=r1+r2;
+  $('#twr1').textContent=r1;$('#twr2').textContent=r2;$('#twk1').textContent=k1;$('#twk2').textContent=k2;$('#twn').textContent=n;
+  // highlight
+  $$('#twTable td').forEach(t=>{t.style.background='';t.style.outline='';});
+  const cell={a:$('#twa').parentNode,b:$('#twb').parentNode,c:$('#twc').parentNode,d:$('#twd').parentNode,r1:$('#twr1'),k1:$('#twk1'),n:$('#twn')};
+  const modes={
+    joint:{num:['a'],den:['n'],txt:`P(Junior ∩ 有工作) = ${a} / ${n} = ${f(a/n)}　<span style="color:var(--muted)">分母是全部人</span>`},
+    c1:{num:['a'],den:['r1'],txt:`P(有工作 | Junior) = ${a} / ${r1} = ${f(a/r1)}　<span style="color:var(--muted)">只看 Junior 这一行</span>`},
+    c2:{num:['a'],den:['k1'],txt:`P(Junior | 有工作) = ${a} / ${k1} = ${f(a/k1)}　<span style="color:var(--muted)">只看“有工作”这一列；和上一个不一样！</span>`},
+    m:{num:['k1'],den:['n'],txt:`P(有工作) = ${k1} / ${n} = ${f(k1/n)}　<span style="color:var(--muted)">边际比例</span>`},
+    or:{num:['a','b','c'],den:['n'],txt:`P(Junior ∪ 有工作) = (${a} + ${b} + ${c}) / ${n} = ${f((a+b+c)/n)}　<span style="color:var(--muted)">= P(J) + P(工) − P(J ∩ 工)</span>`}
+  };
+  if(twMode){const m=modes[twMode];m.den.forEach(k=>cell[k].style.background=C.hl);m.num.forEach(k=>{cell[k].style.background=C.inkSoft;cell[k].style.outline='2px solid '+C.ink;});$('#twPick').innerHTML='<span style="color:var(--ink)">蓝框 = 分子</span>，<span style="background:var(--hl)">黄底 = 分母</span>。'+m.txt;}
+  // bars
+  const svg=$('#twSvg');clear(svg);
+  const bars=[['Junior',a,r1],['Senior',c,r2],['全体（边际）',k1,n]];
+  bars.forEach(([name,y,tot],i)=>{
+    const p=tot?y/tot:0, Y=14+i*48, X=120, W=420;
+    el('text',{x:0,y:Y+20,'font-size':14,fill:C.g},svg,name);
+    el('rect',{x:X,y:Y,width:W,height:30,fill:'#fff',stroke:C.g},svg);
+    el('rect',{x:X,y:Y,width:W*p,height:30,fill:i===2?'#9AA9C9':C.ink},svg);
+    el('text',{x:X+W+10,y:Y+20,'font-size':14,fill:C.g},svg,`有工作 ${f(p*100,1)}%`);
+  });
+  const p1=r1?a/r1:0,p2=r2?c/r2:0,same=Math.abs(p1-p2)<0.005;
+  $('#twVerdict').innerHTML=`P(有工作 | Junior) = ${a}/${r1} ≈ ${f(p1,3)}，P(有工作 | Senior) = ${c}/${r2} ≈ ${f(p2,3)}。<br>`+
+   (same?`<span class="ok">两个条件比例相等，没有关联。</span> <span class="en">There is no association between grade level and employment status because P(employed | junior) = ${f(p1,3)} equals P(employed | senior) = ${f(p2,3)}.</span>`
+        :`<span class="warn">两个条件比例不相等，有关联。</span> <span class="en">There is an association between grade level and employment status because P(employed | junior) = ${f(p1,3)} ≠ P(employed | senior) = ${f(p2,3)}.</span>`)+
+   `<br><span style="font-size:13px;color:var(--muted)">试试把 Senior 改成 有工作 26、没工作 13，或者让两行比例相同（如 13/5 与 26/10），看结论怎么变。</span>`;
+}
+['a','b','c','d'].forEach(k=>$('#tw'+k).addEventListener('input',tw));
+$$('[data-tw]').forEach(b=>b.onclick=()=>{twMode=b.dataset.tw;$$('[data-tw]').forEach(x=>x.classList.toggle('on',x===b));tw();});
+tw();
+
+/* ============ SIMULATION ============ */
+let sims=[],heads=0;
+function simDraw(){
+  const svg=$('#simSvg');clear(svg);const X0=50,X1=680,Y0=190,Y1=15;
+  const N=sims.length, maxN=Math.max(N,10), lx=i=>X0+(X1-X0)*Math.log10(i)/Math.log10(maxN), ly=p=>Y0-(Y0-Y1)*p;
+  el('line',{x1:X0,y1:Y0,x2:X1,y2:Y0,stroke:C.g},svg);el('line',{x1:X0,y1:Y0,x2:X0,y2:Y1,stroke:C.g},svg);
+  [0,.25,.5,.75,1].forEach(p=>{el('text',{x:X0-8,y:ly(p)+4,'font-size':12,'text-anchor':'end',fill:C.m},svg,p);});
+  el('line',{x1:X0,y1:ly(.5),x2:X1,y2:ly(.5),stroke:C.red,'stroke-dasharray':'5 4'},svg);
+  [1,10,100,1000,10000,100000].filter(v=>v<=maxN).forEach(v=>{el('text',{x:lx(v),y:Y0+16,'font-size':12,'text-anchor':'middle',fill:C.m},svg,v);});
+  el('text',{x:X1,y:Y0+30,'font-size':12,'text-anchor':'end',fill:C.m},svg,'抛掷次数（对数刻度）');
+  if(N){let pts=[];const step=Math.max(1,Math.floor(N/800));for(let i=1;i<=N;i+=step)pts.push(lx(i)+','+ly(sims[i-1]));pts.push(lx(N)+','+ly(sims[N-1]));
+    el('polyline',{points:pts.join(' '),fill:'none',stroke:C.ink,'stroke-width':2},svg);}
+  $('#simStat').innerHTML=N?`已抛 ${N} 次，正面 ${heads} 次，比例 <b>${f(heads/N,3)}</b>`:'还没开始抛';
+}
+$$('[data-sim]').forEach(b=>b.onclick=()=>{const k=+b.dataset.sim;if(!k){sims=[];heads=0;}else for(let i=0;i<k;i++){if(Math.random()<.5)heads++;sims.push(heads/(sims.length+1));}simDraw();});
+simDraw();
+
+/* ============ SIGNAL WORDS ============ */
+const signals=[
+ ['What is the probability that an athlete <u>who tests positive</u> actually took drugs?',['P(服药 ∩ 阳性)','P(服药 | 阳性)','P(阳性 | 服药)'],1,'“who tests positive”是定语从句，描述我们已经知道的那群人，是条件。'],
+ ['<u>If</u> the pitch is called a ball, what is the probability that it was actually in the strike zone?',['P(in | ball)','P(ball | in)','P(in ∩ ball)'],0,'if 后面就是已知条件。'],
+ ['<u>Of the homeowners</u> who have four or more credit cards, what proportion have owned their current homes for at least one year?',['P(≥4 张卡 ∩ ≥1 年)','P(≥4 张卡 | ≥1 年)','P(≥1 年 | ≥4 张卡)'],2,'“Of the … who …”：只在这群人里算比例，所以只看表里那一行。'],
+ ['What proportion of people responded no to color consideration <u>and</u> identified safety as an important feature?',['P(no ∩ safety)','P(no | safety)','P(safety | no)'],0,'and 直接拍在脸上：联合概率，分母是全部人（192/1092）。'],
+ ['What is the probability that a randomly selected resident <u>who reads USA Today</u> also reads the New York Times?',['P(USA ∩ NYT)','P(USA | NYT)','P(NYT | USA)'],2,'老师课上全班都选错过：已知他读 USA Today，在这些人里有多少也读 NYT。'],
+ ['<u>Given</u> that a component is defective, what is the probability that it came from supplier A?',['P(A | 坏)','P(坏 | A)','P(A ∩ 坏)'],0,'given 后面一定是条件。'],
+ ['What percent of adult Internet users <u>who visit video-sharing sites</u> are aged 18–29?',['P(18–29 | 看视频)','P(看视频 | 18–29)','P(18–29 ∩ 看视频)'],0,'又是定语从句：已知会上视频网站，问年龄组。']
+];
+const sg=$('#signals');
+signals.forEach(([q,opts,ans,why])=>{
+  const d=document.createElement('div');d.className='reveal';
+  d.innerHTML=`<div class="q">${q}</div><div class="opts seg"></div><div class="fb"></div>`;
+  opts.forEach((o,i)=>{const b=document.createElement('button');b.textContent=o;b.onclick=()=>{
+    d.classList.add('done');d.querySelectorAll('button').forEach((x,j)=>{x.classList.toggle('on',j===ans);});
+    d.querySelector('.fb').innerHTML=(i===ans?'<span class="ok">对。</span>':'<span class="warn">不对，答案是 '+opts[ans]+'。</span>')+why;};
+    d.querySelector('.opts').appendChild(b);});
+  sg.appendChild(d);
+});
+
+/* ============ DISTRIBUTION LAB ============ */
+const dists={
+ apgar:{x:[0,1,2,3,4,5,6,7,8,9,10],p:[.001,.006,.007,.008,.012,.020,.038,.099,.319,.437,.053],name:'Apgar 评分'},
+ pete:{x:[2,3,4,5,6],p:[.15,.25,.35,.20,.05],name:'每天人数'},
+ roulette:{x:[-1,1],p:[.5263,.4737],name:'收益（元）'},
+ coin:{x:[0,1,2,3],p:[.125,.375,.375,.125],name:'正面个数'}
+};
+let D=null,Dk='apgar';
+function loadDist(k){Dk=k;D=JSON.parse(JSON.stringify(dists[k]));$$('[data-dist]').forEach(b=>b.classList.toggle('on',b.dataset.dist===k));
+  const t=document.createElement('table');let h='<tr><th>x</th>'+D.x.map(v=>`<td>${v}</td>`).join('')+'</tr><tr><th>P(X = x)</th>'+D.p.map((v,i)=>`<td><input type="number" step="0.001" data-i="${i}" value="${v}" aria-label="P(X=${D.x[i]})" style="width:64px"></td>`).join('')+'</tr>';
+  t.innerHTML=h;const box=$('#distTable');box.innerHTML='';box.appendChild(t);
+  t.querySelectorAll('input').forEach(inp=>inp.oninput=()=>{D.p[+inp.dataset.i]=+inp.value||0;drawDist();});
+  drawDist();}
+function drawDist(){
+  const {x,p}=D;const sum=p.reduce((a,b)=>a+b,0);const bad=p.some(v=>v<0||v>1)||Math.abs(sum-1)>1e-6;
+  const q=p.map(v=>v/sum);const mu=x.reduce((a,v,i)=>a+v*q[i],0);const sd=Math.sqrt(x.reduce((a,v,i)=>a+(v-mu)**2*q[i],0));
+  const svg=$('#distSvg');clear(svg);const X0=50,X1=680,Y0=190,Y1=15;
+  const lo=Math.min(...x)-0.5,hi=Math.max(...x)+0.5,sx=v=>X0+(X1-X0)*(v-lo)/(hi-lo);const pm=Math.max(...p,0.01);const sy=v=>Y0-(Y0-Y1)*v/pm;
+  const bw=(X1-X0)/(hi-lo)*0.85;
+  if(!bad){el('rect',{x:sx(mu-sd),y:Y1,width:Math.max(0,sx(mu+sd)-sx(mu-sd)),height:Y0-Y1,fill:C.inkSoft},svg);}
+  x.forEach((v,i)=>{el('rect',{x:sx(v)-bw/2,y:sy(Math.max(0,p[i])),width:bw,height:Y0-sy(Math.max(0,p[i])),fill:bad?'#E9A3AC':'#fff',stroke:C.g},svg);
+    el('text',{x:sx(v),y:Y0+16,'font-size':12,'text-anchor':'middle',fill:C.m},svg,v);});
+  el('line',{x1:X0,y1:Y0,x2:X1,y2:Y0,stroke:C.g},svg);
+  if(!bad){el('line',{x1:sx(mu),y1:Y1-4,x2:sx(mu),y2:Y0,stroke:C.ink,'stroke-width':3},svg);el('text',{x:sx(mu)+6,y:Y1+10,'font-size':13,fill:C.ink},svg,'μ = '+f(mu,3));}
+  el('text',{x:X1,y:Y0+32,'font-size':12,'text-anchor':'end',fill:C.m},svg,D.name);
+  let s=`Σp = ${f(sum,4)}。`;
+  if(bad){s+=`<span class="warn">不是合法的概率分布</span>（${p.some(v=>v<0||v>1)?'有概率不在 0 到 1 之间':'概率加起来不等于 1'}）。但如果你直接按计算器，它不会报错，而是悄悄缩放后告诉你 μ ≈ ${f(mu,3)}、σ ≈ ${f(sd,3)}，这个数是错的。`;}
+  else{s+=`<span class="ok">合法。</span> μ = Σxp = <b>${f(mu,4)}</b>，σ² = ${f(sd*sd,4)}，σ = <b>${f(sd,4)}</b>。`;
+    if(Dk==='apgar'){const ge7=x.reduce((a,v,i)=>a+(v>=7?p[i]:0),0);s+=` P(X ≥ 7) = ${f(ge7,3)}（7 分以上算健康）。`;}
+    if(Dk==='roulette')s+=' 平均每玩一次输约 0.053 元。';}
+  $('#distOut').innerHTML=s;
+}
+$$('[data-dist]').forEach(b=>b.onclick=()=>loadDist(b.dataset.dist));
+loadDist('apgar');
+
+/* ============ LINEAR TRANSFORM ============ */
+function drawLin(){
+  const a=+$('#linA').value,b=+$('#linB').value;$('#linAo').textContent=a;$('#linBo').textContent=b;
+  const x=dists.pete.x,p=dists.pete.p,mu=3.75,sd=Math.sqrt(1.1875);
+  const svg=$('#linSvg');clear(svg);const X0=40,X1=680;
+  function row(vals,lo,hi,Y0,label,m,s,ticks){
+    const sx=v=>X0+(X1-X0)*(v-lo)/(hi-lo),H=70;
+    if(s>0)el('rect',{x:sx(m-s),y:Y0-H-4,width:sx(m+s)-sx(m-s),height:H+4,fill:C.inkSoft},svg);
+    el('line',{x1:X0,y1:Y0,x2:X1,y2:Y0,stroke:C.g},svg);
+    ticks.forEach(t=>{el('line',{x1:sx(t),y1:Y0,x2:sx(t),y2:Y0+4,stroke:C.g},svg);el('text',{x:sx(t),y:Y0+17,'font-size':11,'text-anchor':'middle',fill:C.m},svg,t);});
+    vals.forEach((v,i)=>el('rect',{x:sx(v)-6,y:Y0-H*p[i]/.35,width:12,height:H*p[i]/.35,fill:'#fff',stroke:C.g},svg));
+    el('line',{x1:sx(m),y1:Y0-H-8,x2:sx(m),y2:Y0,stroke:C.ink,'stroke-width':3},svg);
+    el('text',{x:X0,y:Y0-H-12,'font-size':13,fill:C.g},svg,label);
+  }
+  row(x,-1500,1500,95,'X：每天人数（同一把尺子上几乎挤成一点）',mu,sd,[-1500,-1000,-500,0,500,1000,1500]);
+  row(x.map(v=>a*v+b),-1500,1500,215,`Y = ${a}X ${b<0?'−':'+'} ${Math.abs(b)}`,a*mu+b,Math.abs(a)*sd,[-1500,-1000,-500,0,500,1000,1500]);
+  $('#linOut').innerHTML=`μ<sub>Y</sub> = ${a} × 3.75 ${b<0?'−':'+'} ${Math.abs(b)} = <b>${f(a*mu+b,2)}</b>　　σ<sub>Y</sub> = |${a}| × 1.090 = <b>${f(Math.abs(a)*sd,1)}</b>　<span style="color:var(--muted)">（b 怎么拖，σ 都不变）</span>`;
+}
+$('#linA').oninput=drawLin;$('#linB').oninput=drawLin;drawLin();
+
+/* ============ BINS ============ */
+const bins=[
+ ['抛一枚均匀硬币 5 次，数正面个数',1,'B：正/反；I：互不影响；N：5 次；S：每次 1/2。'],
+ ['真实轮盘转 8 次，数落在红格的次数',1,'只关心红/非红；n = 8；p = 18/38。'],
+ ['从今天美国医院出生的婴儿中随机抽 100 个，数女孩个数',1,'不放回，但 100 远小于总体的 10%，可以忽略概率变化。'],
+ ['洗好 52 张牌，翻开前 10 张，数 A 的个数',0,'不放回且 10 > 52 的 10%，第二张的概率从 4/52 变成 4/51 或 3/51，违反 I 和 S。'],
+ ['一张张翻牌（放回洗牌），直到翻出 A 为止，数翻了几张',0,'次数不固定，违反 N。'],
+ ['抽卡游戏有“第 51 抽必出”的保底，数 60 抽里出了几张 SSR',0,'保底让前面的结果影响后面（违反 I），第 51 抽概率也变了（违反 S）。']
+];
+const bc=$('#binsCards');
+bins.forEach(([q,ans,why])=>{const d=document.createElement('div');d.className='reveal';d.innerHTML=`<div>${q}</div><div class="opts seg"><button>是二项</button><button>不是</button></div><div class="fb"></div>`;
+  d.querySelectorAll('button').forEach((b,i)=>b.onclick=()=>{const pick=i===0?1:0;d.classList.add('done');d.querySelectorAll('button').forEach((x,j)=>x.classList.toggle('on',(j===0?1:0)===ans));
+    d.querySelector('.fb').innerHTML=(pick===ans?'<span class="ok">对。</span>':'<span class="warn">再想想。</span>')+why;});bc.appendChild(d);});
+
+/* ============ BINOMIAL LAB ============ */
+function comb(n,k){if(k<0||k>n)return 0;let r=1;for(let i=1;i<=k;i++)r=r*(n-k+i)/i;return r;}
+function drawBin(){
+  const n=+$('#bn').value,p=+$('#bp').value,op=$('#bop').value;
+  let a=Math.round(+$('#ba').value||0),b=Math.round(+$('#bb').value||0);
+  $('#bno').textContent=n;$('#bpo').textContent=p.toFixed(2);$('#bbWrap').style.visibility=op==='btw'?'visible':'hidden';
+  const pmf=[];for(let k=0;k<=n;k++)pmf.push(comb(n,k)*p**k*(1-p)**(n-k));
+  const inE=k=>({eq:k===a,le:k<=a,lt:k<a,ge:k>=a,gt:k>a,btw:k>=a&&k<=b})[op];
+  const prob=pmf.reduce((s,v,k)=>s+(inE(k)?v:0),0);
+  const svg=$('#binSvg');clear(svg);const X0=40,X1=880,Y0=200,Y1=15,pm=Math.max(...pmf);
+  const w=(X1-X0)/(n+1);
+  pmf.forEach((v,k)=>{const h=(Y0-Y1)*v/pm;el('rect',{x:X0+k*w+w*.12,y:Y0-h,width:w*.76,height:h,fill:inE(k)?C.ink:'#fff',stroke:C.g},svg);
+    if(n<=25||k%2===0)el('text',{x:X0+k*w+w/2,y:Y0+16,'font-size':12,'text-anchor':'middle',fill:C.m},svg,k);});
+  el('line',{x1:X0,y1:Y0,x2:X1,y2:Y0,stroke:C.g},svg);
+  const mu=n*p;el('line',{x1:X0+mu*w+w/2,y1:Y1,x2:X0+mu*w+w/2,y2:Y0,stroke:C.red,'stroke-dasharray':'5 4'},svg);
+  el('text',{x:X0+mu*w+w/2+5,y:Y1+12,'font-size':12,fill:C.red},svg,'μ = np = '+f(mu,2));
+  const P=p.toFixed(2);
+  const sym={eq:`P(X = ${a})`,le:`P(X ≤ ${a})`,lt:`P(X < ${a})`,ge:`P(X ≥ ${a})`,gt:`P(X > ${a})`,btw:`P(${a} ≤ X ≤ ${b})`}[op];
+  const ti={eq:`binompdf(${n}, ${P}, ${a})`,le:`binomcdf(${n}, ${P}, ${a})`,lt:`binomcdf(${n}, ${P}, ${a-1})`,ge:`1 − binomcdf(${n}, ${P}, ${a-1})`,gt:`1 − binomcdf(${n}, ${P}, ${a})`,btw:`binomcdf(${n}, ${P}, ${b}) − binomcdf(${n}, ${P}, ${a-1})`}[op];
+  const tiNote={eq:'单点用 pdf。',le:'cdf 本来就是 ≤，直接输。',lt:`“< ${a}” 等于 “≤ ${a-1}”。`,ge:`“≥ ${a}” 的反面是 “≤ ${a-1}”，所以输 ${a-1}，不是 ${a}！`,gt:`“> ${a}” 的反面是 “≤ ${a}”。`,btw:`减掉的是 “≤ ${a-1}”，这样 ${a} 才会被保留。`}[op];
+  const lohi={eq:[a,a],le:[0,a],lt:[0,a-1],ge:[a,n],gt:[a+1,n],btw:[a,b]}[op];
+  $('#binOut').innerHTML=`X ~ Binomial(n = ${n}, p = ${P})　　${sym} = <span class="big">${f(prob,5)}</span><br>
+   TI-84：<span class="calc">${ti}</span>　<span style="font-size:14px">${tiNote}</span><br>
+   TI-Nspire / 网页版：<span class="calc">Binomial Cdf(${n}, ${P}, ${lohi[0]}, ${lohi[1]})</span>　<span style="font-size:14px">lower 和 upper 都是“包含”的</span><br>
+   μ = np = ${f(mu,3)}，σ = √(np(1−p)) = ${f(Math.sqrt(n*p*(1-p)),3)}`;
+}
+['#bn','#bp','#bop','#ba','#bb'].forEach(s=>$(s).addEventListener('input',drawBin));drawBin();
+
+/* ============ QUIZ ============ */
+const Q=[
+ ['80 个 junior 中 30 人有工作，120 个 senior 中 45 人有工作。年级和是否有工作之间有关联吗？',['有，因为 30 ≠ 45','没有，因为 30/80 = 45/120 = 0.375','有，因为 senior 有工作的人更多','没有独立性检验就无法判断'],1,'比较条件比例而不是人数：两组都是 0.375，所以没有关联。'],
+ ['P(A) = 0.3，P(B) = 0.4，A 和 B 互斥。下面哪个正确？',['A 和 B 独立','P(A ∪ B) = 0.7','P(A ∩ B) = 0.12','P(A | B) = 0.3'],1,'互斥 ⇒ P(A ∩ B) = 0，所以 P(A ∪ B) = 0.3 + 0.4。互斥事件不独立（P(A | B) = 0 ≠ 0.3）。'],
+ ['P(A) = 0.5，P(B) = 0.4，P(A ∩ B) = 0.2。下面哪个正确？',['A 和 B 独立，因为 0.5 × 0.4 = 0.2','A 和 B 互斥','P(A | B) = 0.4','P(A ∪ B) = 0.9'],0,'P(A)P(B) = 0.2 = P(A ∩ B)，独立。P(A | B) = 0.2/0.4 = 0.5；P(A ∪ B) = 0.7。'],
+ ['零件 30% 来自 A、20% 来自 B、50% 来自 C，坏品率 10%、5%、8%。已知抽到的零件是坏的，它来自 A 的概率约为？',['0.03','0.10','0.375','0.08'],2,'(0.3)(0.1) / [(0.3)(0.1) + (0.2)(0.05) + (0.5)(0.08)] = 0.03/0.08 = 0.375。0.10 是 P(坏 | A)，方向反了。'],
+ ['某病患病率 1%。患者检测阳性的概率 90%，健康人误测成阳性的概率 5%。一个人测出阳性，他真的患病的概率约为？',['0.90','0.154','0.009','0.05'],1,'(0.01)(0.9) / [(0.01)(0.9) + (0.99)(0.05)] = 0.009/0.0585 ≈ 0.154。患病率很低时，阳性里大部分是假阳性。'],
+ ['X 取 0、1、2、3，概率分别为 0.2、0.3、0.4、0.2。下面哪个说法正确？',['X 的均值是 1.7','这不是合法的概率分布，因为概率之和为 1.1','这是合法的分布，因为每个概率都在 0 到 1 之间','把数据输进计算器会报错'],1,'两个条件缺一不可，这里和是 1.1。计算器不会报错，会悄悄缩放后给出一个错误的均值。'],
+ ['某游戏每玩一次的期望收益是 −0.053 元。下面哪个解释最好？',['每玩一次都会输 0.053 元','玩很多很多次后，平均每次大约输 0.053 元','输的概率是 0.053','玩 19 次一定正好输 1 元'],1,'期望值是长期平均（in the long run / many, many times）。'],
+ ['X 的均值 20、标准差 4。Y = 3X − 10，Y 的均值和标准差是？',['50，12','50，2','60，12','50，36'],0,'μ = 3(20) − 10 = 50；σ = |3|(4) = 12。减 10 不影响标准差；36 是方差的 1/4……不对，方差是 144。'],
+ ['X 与 Y 独立，σ<sub>X</sub> = 3，σ<sub>Y</sub> = 4。X − Y 的标准差是？',['1','5','7','√7'],1,'方差相加：9 + 16 = 25，开根号得 5。相减也是加；标准差不能直接相加减。'],
+ ['下面哪个情景中的 X 服从二项分布？',['掷骰子直到出现 6，X = 掷的次数','从 52 张牌中不放回抽 10 张，X = 红桃张数','投 20 次罚球，每次命中率 0.7 且互相独立，X = 命中次数','依次询问同学直到找到左撇子，X = 询问人数'],2,'A、D 次数不固定（违反 N）；B 不放回且超过 10%（违反 I/S）。'],
+ ['X ~ Binomial(n = 10, p = 0.3)。在 TI-84 上求 P(X ≥ 3) 应输入？',['binomcdf(10, 0.3, 3)','1 − binomcdf(10, 0.3, 3)','1 − binomcdf(10, 0.3, 2)','binompdf(10, 0.3, 3)'],2,'P(X ≥ 3) = 1 − P(X ≤ 2)。选 B 算的是 P(X > 3)，是课上大家最容易错的地方。'],
+ ['n = 50，p = 0.2 的二项分布，均值和标准差为？',['10，2.83','10，8','10，0.4','2.83，10'],0,'μ = np = 10；σ = √(50 × 0.2 × 0.8) = √8 ≈ 2.83。8 是方差。']
+];
+Q[7][3]='μ = 3(20) − 10 = 50；σ = |3| × 4 = 12。减 10 只是平移，不影响标准差；36 不对，方差应是 9 × 16 = 144。';
+function buildQuiz(){
+  const box=$('#quizBox');box.innerHTML='';
+  Q.forEach(([q,opts,ans,ex],i)=>{
+    const d=document.createElement('div');d.className='item';
+    d.innerHTML=`<p class="qq">${i+1}. ${q}</p>`+opts.map((o,j)=>`<label><input type="radio" name="q${i}" value="${j}"> ${'ABCD'[j]}. ${o}</label>`).join('')+`<div class="ex">${ex}</div>`;
+    d.querySelectorAll('input').forEach(inp=>inp.onchange=()=>{
+      if(d.classList.contains('answered'))return;d.classList.add('answered');d.dataset.ok=(+inp.value===ans)?1:0;
+      d.querySelectorAll('label').forEach((l,j)=>{if(j===ans)l.classList.add('right');else if(j===+inp.value)l.classList.add('wrong');l.querySelector('input').disabled=true;});
+      score();});
+    box.appendChild(d);});
+  score();
+}
+function score(){const done=$$('#quizBox .answered'),ok=done.filter(d=>d.dataset.ok==='1').length;
+  $('#score').textContent=done.length?`已答 ${done.length} / ${Q.length}，答对 ${ok} 题。`+(done.length===Q.length?(ok>=10?' 很稳。':' 把错的题对应的小节再看一遍。'):''):'';}
+$('#quizReset').onclick=buildQuiz;buildQuiz();
+
+/* ============ NAV ACTIVE ============ */
+const links=$$('#tocList a');const map=new Map(links.map(a=>[a.getAttribute('href').slice(1),a]));
+const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){links.forEach(a=>a.classList.remove('active'));const a=map.get(e.target.id);if(a)a.classList.add('active');}});},{rootMargin:'-30% 0px -65% 0px'});
+$$('main section').forEach(s=>io.observe(s));
+})();
+</script>
+</body>
+</html>
